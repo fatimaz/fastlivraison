@@ -8,7 +8,7 @@ use DB;
 class Order extends Model
 {
    protected $table = "orders";
-    protected $fillable = ['reward','message','trip_id','shipment_id','user_id','type','is_active'];
+    protected $fillable = ['user_id','price','livraison','delivery_date','delivery_time','status','is_active'];
 
     /**
      * The attributes that should be cast to native types.
@@ -27,22 +27,19 @@ class Order extends Model
         return  $this -> is_active  == 0 ?  'non active'   : 'active' ;
     }
 
-
-     public function user()
+    public function user()
     {
         return $this->belongsTo(User::class,'user_id');
     }
 
-    public function trip()
-    {
-        return $this->belongsTo(Trip::class,'trip_id');
+    
+    public function restaurant(){
+        return $this->belongsTo(Restaurant::class,'restaurant_id');
     }
-
-    public function shipment()
+    public function menus()
     {
-        return $this->belongsTo(Shipment::class,'shipment_id');
-    }
-
+     return $this->belongsToMany(Menu::class, 'order_menu')->withPivot('qty');
+     }
 
 
 }

@@ -11,7 +11,6 @@ class Reservation extends Model
     protected $fillable = ['trip_id','user_id','qty','last_price','code','stars','is_active','status'];
 
 
-
     protected $casts = [
         'is_active' => 'boolean',
     ];

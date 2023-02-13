@@ -17,14 +17,9 @@ class ProfileController extends Controller
 
     public function updateProfile(ProfileRequest $request)
     {
-        //validate
-        // db
-
       try {
 
             $admin = Admin::find(auth('admin')->user()->id);
-
-
             if ($request->filled('password')) {
                 $request->merge(['password' => bcrypt($request->password)]);
             }else{

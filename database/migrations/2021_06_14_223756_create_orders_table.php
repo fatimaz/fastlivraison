@@ -14,19 +14,12 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-             $table->integer('reward');
-             $table->text('message');
-            $table->integer('trip_id')->unsigned();
-            $table->integer('shipment_id')->unsigned();
+            $table->increments('id');
             $table->unsignedBigInteger('user_id')->unsigned();
-           $table->boolean('type');
+            $table->string('total_price');
+            $table->boolean('livraison');
             $table->boolean('is_active');
-
-            $table->foreign('trip_id')->references('id')->on('trips')->onDelete('cascade');
-            $table->foreign('shipment_id')->references('id')->on('shipments')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-       
             $table->timestamps();
         });
     }

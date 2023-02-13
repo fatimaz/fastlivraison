@@ -28,7 +28,7 @@
     <meta name="description" content="Premium Quality and Responsive UI for Dashboard.">
     <meta name="author" content="ThemePixels">
 
-    <title>Mega Meuble </title>
+    <title>Yawy</title>
 
     <!-- vendor css -->
     <link href="{{ asset('assets/admin/lib/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
@@ -65,7 +65,7 @@
   @guest
 
   @else
-     @include('admin.includes.sidebar')
+    @include('admin.includes.sidebar')
    @include('admin.includes.header')
    @include('admin.includes.tabs')
 
@@ -153,14 +153,6 @@
         })
       });
     </script>
-
-
-
-
- 
-
-
-
 
     <script src="{{ asset('assets/admin/js/starlight.js') }}"></script>
     <script src="{{ asset('assets/admin/js/ResizeSensor.js') }}"></script>

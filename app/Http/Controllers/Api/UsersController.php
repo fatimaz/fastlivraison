@@ -29,14 +29,11 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    // no
     use UserTrait, GlobalTrait, SMSTrait, SubscriptionTrait;
 
     public function __construct(Request $request)
-    {
-
-    }
-
-
+    {}
     public function register(Request $request)
     {
         try {
@@ -62,11 +59,9 @@ class UserController extends Controller
             }
             DB::beginTransaction();
             try {
-
                 // if (isset($request->photo) && !empty($request->photo)) {
                 //     $fileName = $this->saveImage('users', $request->photo);
                 // }
-
                 $user = User::create([
                     'firstname' => trim($request->firstname),
                     'lastname' => trim($request->lastname),
@@ -78,8 +73,6 @@ class UserController extends Controller
                     'email' => $request->email,
                     'api_token' => ''
                 ]);
-
-
                 DB::commit();
 
                 //fire pusher  notification for admin
@@ -275,7 +268,6 @@ class UserController extends Controller
         if (!$user) {
             return $this->returnError('D000', trans('messages.User not found'));
         }
-
         try {
 
             $rules = [

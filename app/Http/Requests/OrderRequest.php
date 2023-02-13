@@ -24,10 +24,6 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-           'reward' => 'required',
-           'trip_id' => 'required',
-           'user_id' => 'required',
-           'shipment_id' => 'required',
       
         ];
     }

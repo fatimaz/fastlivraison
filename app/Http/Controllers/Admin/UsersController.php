@@ -22,37 +22,35 @@ class UsersController extends Controller
 
     public function store(UserRequest $request)
     {
-        try {
+         try {
 
             $filePath = "";
             if ($request->has('photo')) {
                 $filePath = uploadImage('users', $request->photo);
             }
-              if (!$request->has('active'))
-                $request->request->add(['active' => 0]);
-            else
-                $request->request->add(['active' => 1]);
+            else{
+                $filePath ="user_profile.png";
+            }
+            if (!$request->has('is_active'))
+            $request->request->add(['is_active' => 0]);
+        else
+            $request->request->add(['is_active' => 1]);
+
 
             $user = User::create([
-                'username' => $request->username,
+                'name' => $request->name,
                 'email' => $request->email,
                 'mobile' => $request->mobile,
-                'photo' => $request->photo,
-                'balance' => $request->balance,
+                'photo' => $filePath,
                 'password' => bcrypt($request->password),
                 'is_active' => $request->is_active,
             ]);
-
-
-            return redirect()->route('admin.users')->with(['success' => 'User saved successfuly  ']);
+            return redirect()->route('admin.users')->with(['success' => 'User saved successfuly']);
 
         } catch (\Exception $ex) {
              return redirect()->route('admin.users')->with(['error' => 'There is an error! please try again']);
-
         }
     }
-
-
 
     public function edit($user_id)
     {
@@ -75,7 +73,7 @@ class UsersController extends Controller
 
     public function update($id, UserRequest $request)
     {
-      try {
+     try {
 
             $user = User::find($id);
             if (!$user)
@@ -88,7 +86,18 @@ class UsersController extends Controller
             else
                 $request->request->add(['is_active' => 1]);
 
-            $data = $request->except('_token', 'id');
+
+
+                if ($request->has('photo')) {
+                    $fileName = uploadImage('users', $request->photo);
+                    User::where('id',  $id)
+                        ->update([
+                            'photo' => $fileName,
+                        ]);
+                }
+                
+
+            $data = $request->except('_token', 'id','photo');
 
 
             User::where('id', $id)
@@ -100,7 +109,6 @@ class UsersController extends Controller
         } catch (\Exception $ex) {
              return redirect()->route('admin.users')->with(['error' => 'Error!! Please try again']);
         }
-
     }
 
     public function destroy($id){
@@ -118,4 +126,7 @@ class UsersController extends Controller
             return redirect()->route('admin.users')->with(['error' => 'Error!! Please try again']);
         }
     }
+
+
+
 }

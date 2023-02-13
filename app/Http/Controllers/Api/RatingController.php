@@ -2,17 +2,15 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Reservation;
-use App\Models\Trip;
-use App\Models\Link;
-use App\Models\Driver;
 use App\Traits\GeneralTrait;
+use App\Models\Rating;
+use App\Models\User;
+use App\Models\Offer;
 use DB;
-
 
 class RatingController extends Controller
 {
-         use GeneralTrait;
+    use GeneralTrait;
     /**
      * Create a new controller instance.
      *
@@ -20,6 +18,8 @@ class RatingController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth:api', ['except' => [ 'show']]);
+        //  $this->middleware('auth:api', ['except' => ['index', 'show']]);
     }
     /**
      * Display a listing of the resource.
@@ -28,7 +28,22 @@ class RatingController extends Controller
      */
     public function index()
     {
-     
+        $id = auth('api')->user()->id;
+        $ratings = Rating::with('receiver')->where('receiver_id',$id)->get();
+        return $this-> returnData('ratings',$ratings);
+    }
+
+    public function getReceived()
+    {
+        $id = auth('api')->user()->id;
+        $ratings = Rating::with('sender')->where('receiver_id',$id)->get();
+        return $this-> returnData('ratings',$ratings);
+    }
+    public function getGiven()
+    {
+        $id = auth('api')->user()->id;
+        $ratings = Rating::with('receiver')->where('sender_id',$id)->get();
+        return $this-> returnData('ratings',$ratings);
     }
 
     /**
@@ -37,44 +52,47 @@ class RatingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-//    public function store(Request $request)
-//    {
-//        $rating = new Rating();
-//        $rating->user_id = 1;
-//        $rating->tutor_id = $request->input('tutor_id');
-//        $rating->stars = $request->input('stars');
-//        $rating->review = $request->input('review');
-//        $rating->rated = $request->input('rated');
-//      //  $booking->user_id = auth('api')->user()->id;
-//        $rating->save();
-//        return response()->json([
-//            'success' => true,
-//            'message' => 'saved'
-//        ]);
-//    }
+   public function store(Request $request)
+   {
+    try {
+        DB::beginTransaction();
+       $rating = new Rating();
+       if (!$request->has('is_active'))
+              $rating->is_active = 0; 
+        else
+              $rating->is_active = 1; 
+
+       $rating->sender_id = auth('api')->user()->id;
+       $rating->receiver_id = $request->input('receiver_id');
+       $rating->order_id = $request->input('order_id');
+       $rating->stars = $request->input('stars');
+       $rating->review = $request->input('review');
+       $rating->save();
+        $user = User::find($rating->receiver_id);
+        $offer = Offer::find($rating->order_id);
+        $offer->rated= 1;
+        $offer->save();
+        $avgstars = $rating->where('receiver_id',$user->id)->avg('stars');
+        $numRating = Rating::where('receiver_id',$user->id)->where('stars','!=', 0)->count();
+        $user->avgstars = $avgstars;
+        $user->numRating = $numRating;
+        $user->save();
+       DB::commit();
+         return $this->returnSuccessMessage('Rating saved successfully');
+        } catch (\Exception $ex) {
+             DB::rollback();
+             return $this->returnError($ex->getCode(), $ex->getMessage());
+        }
+   }
     /**
      * Display the specified resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
-    {}
-//        $ratings = DB::table('ratings')
-//           ->where('tutor_id','=', $id)
-//           ->join('tutors', 'ratings.tutor_id', '=', 'tutors.id')
-//            ->join('users', 'ratings.user_id', '=', 'users.id')
-//            ->select('ratings.*', 'tutors.firstname','tutors.lastname', 'users.firstname')
-//           ->where('ratings.rated', 1)
-//            ->where('ratings.status', 1)
-//            ->get();
-//
-//        return response()->json([
-//            'success' => true,
-//            'message' => 'booking',
-//            'ratings' => $ratings,
-//        ]);
-//
-
+    public function show($id){
+        $ratings = Rating::with('sender')->where('receiver_id',$id)->get();
+        return $this-> returnData('ratings',$ratings);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -82,42 +100,33 @@ class RatingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
-    {
-      try {
-        DB::beginTransaction();
-
-        $reservation = Reservation::find($id);
-
-        if($reservation) {
-            $reservation->stars = $request->input('stars');
-            $reservation->save();
-
-        }
-         $trip = Trip::find($reservation->trip_id);
-
-
-        $driver = Driver::where('id',$trip->driver_id)->first();
-         
-
-
-        $totalstars = Reservation::where('trip_id',$trip->id)->active()->where('status',1)->avg('stars');
-
-
-        $numRating = Reservation::where('trip_id',$trip->id)->active()->->where('status',1)->where('stars','!=', 0)->count();
-    
-
-        $driver->totalstars = $totalstars;
-        $driver->numRating = $numRating;
-        $driver->save();
-        DB::commit();
-         return $this->returnSuccessMessage('Note enregistrée avec succès');
-          } catch (\Exception $ex) {
-                 DB::rollback();
-                return $this->returnError($ex->getCode(), $ex->getMessage());
-          }
-    }
-     
+    public function update(Request $request, $id)
+    {}
+          // try {
+        //     DB::beginTransaction();
+        //     $offer = new Offer();
+        //     if (!$request->has('is_active'))
+        //          $offer->is_active = 0; 
+        //      else
+        //           $offer->is_active = 1; 
+        //           $offer->sender_id = 81;    
+        //           $offer->receiver_id =$request->input('receiver_id');  
+        //           $offer->order_id= $request->input('order_id');  
+        //           $offer->stars =$request->input('stars');  
+        //           $offer->review =$request->input('review'); 
+              
+        //           $offer->save();
+        // $user = User::find($offre->user_id);
+        // $totalstars = $offre->where('user_id',$user->id)->avg('stars');
+        // $numRating = Offre::where('user_id',$user->id)->where('stars','!=', 0)->count();
+        // $user->avgstars = $avgstars;
+        // $user->numRating = $numRating;
+        // $user->save();
+        // DB::commit();
+        //  return $this->returnSuccessMessage('Offer saved successfully');
+        // } catch (\Exception $ex) {
+        //      DB::rollback();
+        //      return $this->returnError($ex->getCode(), $ex->getMessage());
+        // }
+   
 }
-
-

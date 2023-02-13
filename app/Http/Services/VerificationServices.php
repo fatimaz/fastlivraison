@@ -24,9 +24,7 @@ class VerificationServices
 
     public function getSMSVerifyMessageByAppName( $code)
     {
-        $message = " is your verification code for your account";
-
-
+        $message = " est votre code de vérification pour votre compte";
         return $code.$message;
     }
 
@@ -37,7 +35,7 @@ class VerificationServices
             $verificationData = User_Verification::where('user_id',Auth::id()) -> first();
 
             if($verificationData -> code == $code){
-                User::whereId(Auth::id()) -> update(['email_verified_at' => now()]);
+                User::whereId(Auth::id()) -> update(['phone_verified_at' => now()]);
                 return true;
             }else{
                 return false;

@@ -1,6 +1,6 @@
   <footer>
     <div class="container">
-      <p>&copy; Your Website 2020. All Rights Reserved.</p>
+      <p>&copy; 2021 Yawy Inc.</p>
             <ul class="list-inline list-social">
         <li class="list-inline-item social-twitter">
           <a href="#">
@@ -14,13 +14,13 @@
         </li>
         <li class="list-inline-item social-google-plus">
           <a href="#">
-            <i class="fab fa-google-plus-g"></i>
+            <i class="fab fa-instagram"></i>
           </a>
         </li>
       </ul>
       <ul class="list-inline">
         <li class="list-inline-item">
-          <a href="#">Privacy</a>
+          <a href="#">Contact </a>
         </li>
         <li class="list-inline-item">
           <a href="#">Terms</a>

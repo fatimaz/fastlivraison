@@ -16,8 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
 
+});
+Route::group([ 'middleware' => ['auth:api']], function () {
+Route::get('/users', function (Request $request) {
+  return auth('api')->user();
+});
+});
  Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
 	  
      // Route::apiResource('bookings','BookingsController');
@@ -41,36 +46,68 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
     Route::get('get-trips','TripsController@index');
-    Route::post('countbuses','TripsController@countBuses');
+    Route::apiResource('trips', 'TripsController');
 
-    
+
+
+    Route::apiResource('menus', 'MenusController');
+
+
     Route::get('voyage','VoyageController@index');
     Route::apiResource('bookings','BookingsController');
-    Route::apiResource('ratings','RatingController'); 
-    Route::apiResource('shipments','ShipmentsController'); 
-    Route::post('changePassword', 'ProfileController@changePassword');
 
+    Route::apiResource('ratings','RatingController'); 
+
+    Route::apiResource('carts','CartsController'); 
+
+    Route::apiResource('products','ProductsController'); 
+
+    Route::apiResource('prescriptions','PrescriptionsController'); 
+
+    
+    Route::apiResource('shipments','ShipmentsController'); 
+    Route::get('getMyshipments',"ShipmentsController@showMyShipments"); 
+    Route::get('getmatchingshipments',"ShipmentsController@matchingShipments"); 
+    Route::post('updateshipment',"ShipmentsController@updateShipment"); 
 
  
+
+    Route::get('avis/received',"RatingController@getReceived"); 
+    Route::get('avis/given',"RatingController@getGiven"); 
+
+    Route::get('deals',"OffersController@deals"); 
+    Route::post('offers/edit/{id}',"OffersController@updateOffer"); 
+
+    
+    Route::apiResource('messages','MessagesController');
+    Route::apiResource('reports','ReportController');
+
+    Route::get('get/usermessages','MessagesController@showUserMessages');
+    
+
+   Route::get('email/resend',"VerificationController@resend"); 
+   Route::get('email/verify/{id}/{hash}',"VerificationController@verify"); 
+   Route::post('verify',"VerificationController@verifyEmail"); 
+
+
+   Route::get('/verify/email/{token}/{user_id}', 'VerificationController@setVerify')->name('verify'); 
+
+    Route::apiResource('countries','CountriesController'); 
+    Route::apiResource('categories','CategoriesController'); 
+    Route::apiResource('offers','OffersController'); 
+    Route::apiResource('chats','ChatsController'); 
+    Route::post('changePassword', 'ProfileController@changePassword');
+    Route::post('send/phonenumber', 'ProfileController@sendPhone');
+
+    
     // 'middleware' => 'api',
-     Route::group(['prefix' => 'user'],function (){
+    Route::group(['prefix' => 'user'],function (){
 	         Route::post('login', 'UserController@login');
 	         Route::post('register', 'UserController@register');
 	         Route::post('resend/verification-code', "UserController@resendCodeVerification");
-	         Route::post('codeverification', "UserController@CodeVerification");
            Route::post('forgetPassword', "UserController@forgetPass");    
      });
 
-        Route::group(['prefix' => 'driver'],function (){
-          Route::post('login', 'DriverController@login');
-      
-          Route::apiResource('trips', 'DriverController');
-           Route::post('getfrombalance', 'DriverController@getFromBalance');
-           Route::post('pay_same_price', 'DriverController@paySamePrice');
-             Route::post('payMore', 'DriverController@payMore');
-
-           
-        });
 
         // hada project l9dim
     // Route::post('login', 'AuthController@login');
@@ -78,12 +115,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     // Route::post('refresh', 'AuthController@refresh');
     // Route::post('me', 'AuthController@me');
     // Route::get('password','Api\ProfileController@changePassword');
-
-
-
     Route::apiResource('profile', 'ProfileController');
     Route::apiResource('signup','SignupController');
-    Route::apiResource('ratings','RatingController');
+    Route::post('codeverification', "ProfileController@CodeVerification");
+  
+
+
+    Route::post('photo', 'ProfileController@editPhoto');
+    
 
     // Route::group([ 'namespace' => 'Api','middleware' => 'api'], function () {
 
@@ -93,21 +132,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   
 });
 
-
-
-// dd
-
-
-
     // Route::post('/password/email', 'Api\ForgotPasswordController@sendResetLinkEmail');
-    // Route::post('/password/reset', 'Api\ResetPasswordController@reset');
+    // Route::post('/password/reset', 'Api\ResetPasswordController@reset');  
 
-
-
-//    Route::group(['middleware' => ['auth']], function () {
-
-
-   // Route::post('cancelBooking/{id}','Api\BookingsController@cancelBooking');
-
+    // Route::group(['middleware' => ['auth']], function () {
+    // Route::post('cancelBooking/{id}','Api\BookingsController@cancelBooking');
     // Route::post('forgetpass','Api\SignupController@forgetPass');
 

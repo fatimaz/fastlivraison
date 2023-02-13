@@ -10,17 +10,14 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable=['name','email','password','mobile','photo','rewards','passport','verified','activation_code','is_active','api_token'];
-
+    protected $fillable=['name','email','password','mobile','photo','rewards','passport','verified','activation_code','is_active','offers_sent','offers_received', 'avgstars','numRating','api_token'];
     public $timestamps = true;
 
-  
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -38,38 +35,31 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'is_active' => 'boolean',
         'email_verified_at' => 'datetime',
+        'document_verified_at'=> 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
      public function scopeActive($query){
         return $query -> where('is_active',1) ;
     }
 
-    public function getActive()
-    {
-        return $this->active == 1 ? 'active' : 'non active';
+    public function getActive(){
+        return  $this -> is_active  == 0 ?  'non active'   : 'active' ;
     }
+
 
     public function getPhotoAttribute($val)
     {
-        return ($val !== null) ? asset('assets/' . $val) : "";
+        return ($val !== null) ? asset('assets/images/users/' . $val) : "";
 
     }
-
 
     public function codes(){
         return $this -> hasMany('Users_Verification','user_id');
     }
 
-
-
     public function addresses(){
         return $this->hasMany(Address::class,'user_id');
-    }
-
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class,'user_id');
     }
 
 
@@ -83,12 +73,34 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-       public function tokens()
+    public function tokens()
     {
         return $this->hasMany('App\Models\UserToken');
     }
 
+    public function shipments()
+    {
+        return $this->hasMany(Shipment::class,'user_id');
+    }
 
+    public function trips()
+    {
+        return $this->hasMany(Trip::class,'user_id');
+    }
+  
+    public function offers()
+    {
+        return $this->hasMany(Offer::class,'user_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class,'receiver_id');
+    }
+    public function messagesfrom()
+    {
+        return $this->hasMany(Message::class,'sender_id');
+    }
 }
 
 

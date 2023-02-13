@@ -70,12 +70,12 @@ class Kernel extends HttpKernel
         'localeCookieRedirect'    => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
         'localeViewPath'          => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
          'VerifiedUser'          => \App\Http\Middleware\VerifyCode::class,
+        'CheckUserToken' => \App\Http\Middleware\CheckUserToken::class,
+        'checkDriverToken' => \App\Http\Middleware\CheckDriverToken::class,
 
+     'auth.guard'  =>  \App\Http\Middleware\AssignGuard::class,
 
-
-     'checkUserToken' => \App\Http\Middleware\CheckUserToken::class,
-       'checkDriverToken' => \App\Http\Middleware\CheckDriverToken::class,
-
-     'auth.guard'  => AssignGuard::class
+     'jwt.auth'=> 'Tymon\JWTAuth\Middleware\GetUserFromToken',
+     'jwt.refresh'=> 'Tymon\JWTAuth\Middleware\RefreshToken',
     ];
 }

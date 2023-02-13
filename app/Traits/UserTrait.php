@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Traits;
-
 use App\Models\User;
 use Carbon\Carbon;
 use DB;
@@ -13,16 +12,9 @@ trait UserTrait
 {
     public function authUserByEmail($email, $password)
     {
-
-        $userId = null;
-
+       $userId = null;
         $user = User::where('users.email', $email)->first();
-
-
-        $token = Auth::guard('api')->attempt(['email' => $email, 'password' => $password]);
-
-
-          
+        $token = Auth::guard('api')->attempt(['email' => $email, 'password' => $password]);      
         // if($user-> email_verified_at == null)
         //        return null;
 
@@ -38,10 +30,8 @@ trait UserTrait
             $user->update(['api_token' => $token]);
 
            return $user;
-
         }
          return null;
-         // return null;
     }
 
     public function getUserByTempToken($token)
@@ -70,5 +60,4 @@ trait UserTrait
 
         return $user;
     }
-
 }

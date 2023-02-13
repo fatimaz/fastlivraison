@@ -9,7 +9,7 @@ use DB;
 class Category extends Model
 {
 
-    protected $fillable = ['name','is_active'];
+    protected $fillable = ['name','photo','is_active'];
 
      protected $casts = [
         'is_active' => 'boolean',
@@ -19,16 +19,19 @@ class Category extends Model
         return $query -> where('is_active',1) ;
     }
 
+    public function getPhotoAttribute($val)
+    {
+        return ($val !== null) ? asset('assets/images/products/' . $val) : "";
+
+    }
+
+
     public function getActive(){
         return  $this -> is_active  == 0 ?  'non active'   : 'active' ;
     }
-
-       
-    public function shipments(){
-        return $this->hasMany(Shipment::class,'category_id');
+    
+    public function products(){
+        return $this->hasMany(Product::class,'category_id');
     }
 
-    public function trips(){
-        return $this->hasMany(Trip::class,'category_id');
-    }
 }

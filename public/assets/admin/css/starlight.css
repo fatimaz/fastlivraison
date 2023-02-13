@@ -122,8 +122,8 @@ body {
   font-size: 0.875rem;
   font-weight: normal;
   line-height: 1.5;
-  color: #868ba1;
-  background-color: #D8DCE3;
+  /* color: #868ba1; */
+  background-color: #f8f9fe;
 }
 
 [tabindex="-1"]:focus {
@@ -424,6 +424,7 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
+  
 }
 
 h1, .h1 {
@@ -435,11 +436,12 @@ h2, .h2 {
 }
 
 h3, .h3 {
-  font-size: 1.75rem;
+  font-size: 1.0625rem;
+  color: #32325d;
 }
 
 h4, .h4 {
-  font-size: 1.5rem;
+  font-size: .9375rem;
 }
 
 h5, .h5 {
@@ -1307,7 +1309,7 @@ pre code {
   border-top: 2px solid #dee2e6;
 }
 .table .table {
-  background-color: #D8DCE3;
+  background-color: #f4f0ec;
 }
 
 .table-sm th,
@@ -4286,7 +4288,7 @@ button.close {
 .modal-body {
   position: relative;
   flex: 1 1 auto;
-  padding: 15px;
+  padding: 25px;
 }
 
 .modal-footer {
@@ -4785,7 +4787,10 @@ a.bg-primary:focus, a.bg-primary:hover {
 }
 
 .bg-secondary {
-  background-color: #868e96 !important;
+  /* background-color: #868e96 !important; */
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 a.bg-secondary:focus, a.bg-secondary:hover {
@@ -8884,7 +8889,7 @@ p {
 
 .form-control-inverse {
   border: 0;
-  background-color: #252c35;
+  background-color: rgba(255, 82, 82, 1);
   color: rgba(255, 255, 255, 0.6);
 }
 .form-control-inverse:focus {
@@ -10005,8 +10010,8 @@ textarea.parsley-error:active {
   font-weight: 700;
   font-size: 12px;
   text-transform: uppercase;
-  background-color: #dee2e6;
-  color: #343a40;
+  background-color: #f6f9fc;
+  color: #8898aa;
   letter-spacing: 0.5px;
 }
 .table thead.bg-primary > tr > th,
@@ -11874,7 +11879,7 @@ textarea.parsley-success:focus {
   right: 0;
   left: 0;
   z-index: 1030;
-  background-color: #2b333e;
+  background-color: rgba(255, 82, 82, 1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11963,7 +11968,7 @@ textarea.parsley-success:focus {
 .navicon-left {
   width: 60px;
   height: 60px;
-  background-color: #313a47;
+  background-color: rgba(255, 82, 82, 1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11981,7 +11986,7 @@ textarea.parsley-success:focus {
   display: flex;
   width: 60px;
   height: 60px;
-  background-color: #252c35;
+  background-color: rgba(255, 82, 82, 1);
   align-items: center;
   justify-content: center;
 }
@@ -12027,7 +12032,7 @@ textarea.parsley-success:focus {
   left: -230px;
   width: 230px;
   height: 60px;
-  background-color: #384250;
+  background-color: #ffffff;
   font-size: 22px;
   font-weight: 600;
   padding: 0 20px;
@@ -12042,7 +12047,7 @@ textarea.parsley-success:focus {
   }
 }
 .sl-logo > a {
-  color: #fff;
+  color: #0866C6;
 }
 .sl-logo > a i {
   color: #5B93D3;

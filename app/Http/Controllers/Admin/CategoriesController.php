@@ -24,12 +24,16 @@ class CategoriesController extends Controller
 
     public function store(CategoryRequest $request)
     {
+       DB::beginTransaction();
+       $filePath = "";
+       if ($request->has('photo')) {
+           $filePath = uploadImage('products', $request->photo);
+       }
 
-        DB::beginTransaction();
-
-        //validation
-        //another way of saving
-        $category = Category::create(['name' => $request -> name]);
+        $category = Category::create([
+            'name' => $request -> name,
+            'photo' => $filePath,
+        ]);
 
         DB::commit();
         return redirect()->route('admin.categories')->with(['success' => 'category added successfuly']);
@@ -37,7 +41,7 @@ class CategoriesController extends Controller
 
     public function edit($id)
     {
-        //get specific categories and its translations
+  
         $category = Category::find($id);
 
         if (!$category)
@@ -51,7 +55,6 @@ class CategoriesController extends Controller
     public function update($id, CategoryRequest  $request)
     {
         try {
-
             $category = Category::find($id);
 
             if (!$category)
@@ -59,6 +62,14 @@ class CategoriesController extends Controller
 
 
             DB::beginTransaction();
+
+
+            if ($request->has('photo')) {
+                $fileName = uploadImage('products', $request->photo);
+                $category ->update([
+                        'photo' => $fileName,
+                    ]);
+            }
 
             $category->update($request->except('_token', 'id'));  // update only for slug column
 
@@ -76,10 +87,9 @@ class CategoriesController extends Controller
     public function destroy($id)
     {
         try {
-            //get specific categories and its translations
             $category = Category::find($id);
 
-            if (!$categories)
+            if (!$category)
                 return redirect()->route('admin.categories')->with(['error' => 'This category doesnt exist']);
 
             $category->delete();

@@ -21,7 +21,6 @@ trait GeneralTrait
         ]);
     }
 
-
     public function returnSuccessMessage($msg = "", $errNum = "S000")
     {
         return [
@@ -37,8 +36,8 @@ trait GeneralTrait
             'status' => true,
             'errNum' => "S000",
             'msg' => $msg,
-            $key => $value,
-           'token_type' => 'bearer'
+             $key => $value,
+            'token_type' => 'bearer'
         ]);
     }
 
@@ -46,7 +45,6 @@ trait GeneralTrait
     {
         return $this->returnError($code, $validator->errors()->first());
     }
-
 
     public function returnCodeAccordingToInput($validator)
     {
@@ -229,5 +227,29 @@ trait GeneralTrait
             return "";
     }
 
+    public function auth($guard, $relations = [])
+    {
+        $user = null;
+        if (isset(request()->api_token)) {
+            $api_token = request()->api_token;
+            if ($guard == 'api') {
+                $user = UserToken::where('api_token', request()->api_token)->first();
+                $id = $user ? $user->user_id : 0;
+                $user = User::where('id', $id);
+
+            } else if ($guard == 'coach-api') {
+                $user = Token::where('api_token', request()->api_token)->first();
+                $id = $user ? $user->coach_id : 0;
+                $user = Coach::where('id', $id);
+            } else if ($guard == 'manager-api') {
+                $user = Manager::where('api_token', request()->api_token);
+            }
+            if ($relations && is_array($relations))
+                $user->with($relations);
+
+            $user = $user->first();
+        }
+        return $user;
+    }
 
 }

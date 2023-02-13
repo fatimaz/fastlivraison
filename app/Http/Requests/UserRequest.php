@@ -24,11 +24,10 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-           'username' => 'required',
+            'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$this -> id,
-            'password'  => 'nullable|confirmed|min:8',
-            'mobile'=>'required|unique:users,phone,'.$this -> id,
-       
+            'password'  => 'nullable|min:6',
+            // 'mobile'=>'required|unique:users,mobile,'.$this -> id,
         ];
     }
 

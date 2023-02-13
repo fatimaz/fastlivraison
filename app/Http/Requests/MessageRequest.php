@@ -24,17 +24,18 @@ class MessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => 'required|string|max:100',
+            'sender_id' => 'required',
+            'receiver_id' => 'required',
+            'shipment_id' => 'required',
         ];
     }
 
-
-    public function messages()
-    {
-        return [
-            'required' => 'هذا الحقل مطلوب',
-            'message.string' => 'اسم اللغة لابد ان يكون احرف',
-            'message.max' => 'اسم اللغة لابد الا يزيد عن 100 احرف ',
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'required' => 'هذا الحقل مطلوب',
+    //         'message.string' => 'اسم اللغة لابد ان يكون احرف',
+    //         'message.max' => 'اسم اللغة لابد الا يزيد عن 100 احرف ',
+    //     ];
+    // }
 }

@@ -17,6 +17,7 @@ define('PAGINATION_COUNT', 15);
 function uploadImage($folder,$image){
     $image->store('/', $folder);
     $filename = $image->hashName();
+    // \Intervention\Image\facades\Image::make($filename)->resize('300', '162')->save($thumpPathNew , 100);
     //$path = 'images/'.$folder.'/'.$filename;
     return  $filename;
 }

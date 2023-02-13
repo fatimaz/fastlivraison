@@ -13,12 +13,15 @@ class Image extends Model
      *
      * @var array
      */
-    protected $fillable = ['product_id','photo','created_at','updated_at'];
+    protected $fillable = ['name','prescription_id'];
+    
+    public function getActive(){
+        return  $this -> is_active  == 0 ?  'non active'   : 'active' ;
+    }
 
-
-    public function product()
+    public function prescription()
     {
-        return $this->belongsTo(Product::class,'product_id');
+        return $this->belongsTo(Prescription::class,'prescription_id');
     }
 
 

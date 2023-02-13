@@ -14,7 +14,6 @@
                         <form method="get" action="{{url('/setPass')}}" class="form-horizontal">
                                @csrf
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                              
                                  <input type="hidden" name="email" value="{{$data[0]->email}}">
                             </div>
                            
@@ -24,7 +23,7 @@
                                             <input id="password" type="password" name="password" class="form-control">
                                              @error("password")
                                                     <span class="text-danger">{{$message}}</span>
-                                                @enderror
+                                            @enderror
                                         </div>
                                     </div>
                                
